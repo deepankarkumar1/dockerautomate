@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "myapp"
+        CONTAINER_NAME = "myapp-container"
     }
 
     stages {
@@ -16,15 +17,34 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t myapp .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
-        stage('List Images') {
+        stage('Stop Old Container') {
             steps {
-                sh 'docker images'
+                sh '''
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
+                '''
             }
         }
 
+        stage('Run New Container') {
+            steps {
+                sh '''
+                docker run -d \
+                --name $CONTAINER_NAME \
+                -p 3090:3090 \
+                $IMAGE_NAME
+                '''
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                sh 'docker ps'
+            }
+        }
     }
 }
