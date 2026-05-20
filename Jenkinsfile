@@ -1,12 +1,16 @@
 pipeline {
-
     agent any
+
+    environment {
+        IMAGE_NAME = "myapp"
+    }
 
     stages {
 
-        stage('Clone Code') {
+        stage('Clone') {
             steps {
-                git 'https://github.com/deepankarkumar1/dockerautomate.git'
+                git branch: 'main',
+                url: 'https://github.com/deepankarkumar1/dockerautomate.git'
             }
         }
 
@@ -16,10 +20,11 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
+        stage('List Images') {
             steps {
-                sh 'docker push myapp'
+                sh 'docker images'
             }
         }
+
     }
 }
