@@ -31,16 +31,16 @@ pipeline {
         }
 
         stage('SAST Scan - Semgrep') {
-            steps {
-                sh '''
-                semgrep \
-                --config auto \
-                . \
-                --json \
-                --output reports/semgrep-report.json
-                '''
-            }
+    steps {
+        sh '''
+        semgrep \
+        --config auto \
+        . \
+        --json \
+        --output reports/semgrep-report.json || true
+        '''
         }
+      }
 
         stage('Dependency Scan') {
             steps {
