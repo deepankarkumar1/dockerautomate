@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('SAST Scan - Semgrep') {
+        stage('SAST Scan by - Semgrep') {
     steps {
         sh '''
         semgrep \
